@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using Escc.EastSussexGovUK.UmbracoDocumentTypes.Css;
 using Escc.EastSussexGovUK.UmbracoDocumentTypes.DataTypes;
@@ -43,6 +46,8 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
                 };
                 response.Content.Headers.Expires = DateTimeOffset.Now.Add(response.Headers.CacheControl.MaxAge.Value);
 
+                EnableCorsSupport(HttpContext.Current.Request, response);
+
                 return response;
             }
             catch (Exception e)
@@ -51,6 +56,36 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
+
+        /// <summary>
+        /// Enables CORS support.
+        /// </summary>
+        /// <remarks>
+        /// This code is a temporary copy until Escc.Data.Web is moved to NuGet and improved to remove dependencies on WebForms and Escc.EastSussexGovUK
+        /// </remarks>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        private static void EnableCorsSupport(HttpRequest request, HttpResponseMessage response)
+        {
+            // Load config from elsewhere
+            var config = ConfigurationManager.GetSection("EsccWebTeam.EastSussexGovUK/RemoteMasterPage") as NameValueCollection;
+            if (config == null || String.IsNullOrEmpty(config["CorsAllowedOrigins"])) return;
+            var allowedOrigins = new List<string>(config["CorsAllowedOrigins"].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries));
+            
+            // Not a CORS request - do nothing
+            var requestOrigin = request.Headers["Origin"];
+            if (String.IsNullOrEmpty(requestOrigin)) return;
+
+            // Is the origin in the list of allowed origins?
+            var allowedOrigin = new List<string>(allowedOrigins).Contains(requestOrigin.ToLowerInvariant());
+
+            // If it is, echo back the origin as a CORS header
+            if (allowedOrigin)
+            {
+                response.Content.Headers.Add("Access-Control-Allow-Origin", requestOrigin);
+            }
+        }
+
+
 
         /// <summary>
         /// Checks the authorisation token passed with the request is valid, so that this method cannot be called without knowing the token.

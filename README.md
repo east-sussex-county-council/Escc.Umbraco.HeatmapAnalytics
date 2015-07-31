@@ -6,6 +6,8 @@ Create a content node using the 'Heatmap analytics' document type, add the URLs 
 
 	https://hostname:port/umbraco/api/HeatmapAnalytics/GetHeatmapAnalyticsUrls
 
+See [heatmap-analytics.js](https://github.com/east-sussex-county-council/Escc.EastSussexGovUK/blob/master/Escc.EastSussexGovUK/js/heatmap-analytics.js) in the `Escc.EastSussexGovUK` project for an example of how to read and apply the data.
+
 ## Using NuGet to include these templates in Umbraco
 
 This project references the [Umbraco CMS NuGet package](https://www.nuget.org/packages/UmbracoCms) and is a working Umbraco installation, but this is just for testing the templates in a development environment. In production this project is published as a NuGet package to our private feed, and consumed by our main Umbraco application. We use [NuBuild](https://github.com/bspell1/NuBuild) to make creating the NuGet package really easy, and [reference our private feed using a nuget.config file](http://blog.davidebbo.com/2014/01/the-right-way-to-restore-nuget-packages.html).

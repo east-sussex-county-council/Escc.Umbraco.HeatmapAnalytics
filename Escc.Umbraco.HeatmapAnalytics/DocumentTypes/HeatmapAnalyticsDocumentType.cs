@@ -8,7 +8,8 @@ namespace Escc.Umbraco.HeatmapAnalytics.DocumentTypes
     /// <summary>
     /// A specification for the 'Heatmap analytics' document type in Umbraco
     /// </summary>
-    [UmbracoContentType("Heatmap analytics", "HeatmapAnalytics", null, false, BuiltInUmbracoContentTypeIcons.IconFire, allowAtRoot: true)]
+    [UmbracoContentType("Heatmap analytics", "HeatmapAnalytics", null, false, BuiltInUmbracoContentTypeIcons.IconFire, allowAtRoot: true,
+        Description = "Manage settings for a heatmap analytics service")]
     public class HeatmapAnalyticsDocumentType : UmbracoGeneratedBase
     {
         [UmbracoTab("Content")]

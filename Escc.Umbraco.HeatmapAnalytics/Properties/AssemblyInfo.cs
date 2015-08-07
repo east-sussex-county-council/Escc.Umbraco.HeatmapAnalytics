@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Escc.Umbraco.HeatmapAnalytics")]
-[assembly: AssemblyDescription("Manage settings for heatmap analytics service in Umbraco")]
+[assembly: AssemblyDescription("Manage settings for a heatmap analytics service in Umbraco")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("East Sussex County Council")]
 [assembly: AssemblyProduct("Escc.Umbraco.HeatmapAnalytics")]

@@ -36,15 +36,7 @@ Example: C:\>set GIT_ORIGIN_URL=https://example-git-server.com/{0}"
 
 $projectName = "Escc.Umbraco.HeatmapAnalytics"
 
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.EastSussexGovUK"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.NavigationControls"
 DownloadProjectIfMissing $parentFolderOfThisScript "Escc.Data.Web"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.Data.Xml"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.HouseStyle"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.Data.ActiveDirectory"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.Cms"
-DownloadProjectIfMissing $parentFolderOfThisScript "Escc.Elibrary"
-NuGetRestoreForProject $parentFolderOfThisScript "Escc.Cms"
 
 EnableDotNet40InIIS
 CreateApplicationPool $projectName

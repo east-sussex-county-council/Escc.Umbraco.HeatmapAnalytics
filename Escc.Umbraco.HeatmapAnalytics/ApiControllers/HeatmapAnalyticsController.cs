@@ -14,6 +14,7 @@ using Escc.EastSussexGovUK.UmbracoDocumentTypes.RichTextPropertyEditor;
 using Escc.Umbraco.HeatmapAnalytics.DocumentTypes;
 using Escc.Umbraco.PropertyEditors.Stylesheets;
 using Escc.Umbraco.PropertyTypes;
+using EsccWebTeam.Data.Web;
 using Exceptionless;
 using ExCSS;
 using Umbraco.Inception.CodeFirst;
@@ -61,15 +62,14 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
         /// Enables CORS support.
         /// </summary>
         /// <remarks>
-        /// This code is a temporary copy until Escc.Data.Web is moved to NuGet and improved to remove dependencies on WebForms and Escc.EastSussexGovUK
+        /// This code is a temporary copy until Escc.Data.Web is moved to NuGet and improved to remove dependencies on WebForms 
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         private static void EnableCorsSupport(HttpRequest request, HttpResponseMessage response)
         {
             // Load config from elsewhere
-            var config = ConfigurationManager.GetSection("EsccWebTeam.EastSussexGovUK/RemoteMasterPage") as NameValueCollection;
-            if (config == null || String.IsNullOrEmpty(config["CorsAllowedOrigins"])) return;
-            var allowedOrigins = new List<string>(config["CorsAllowedOrigins"].Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries));
+            var config = new ConfigurationCorsAllowedOriginsProvider();
+            var allowedOrigins = config.CorsAllowedOrigins();
             
             // Not a CORS request - do nothing
             var requestOrigin = request.Headers["Origin"];

@@ -11,11 +11,9 @@ using System.Web.Http;
 using Escc.Umbraco.HeatmapAnalytics.DocumentTypes;
 using Escc.Umbraco.PropertyEditors.DataTypes;
 using Escc.Umbraco.PropertyEditors.RichTextPropertyEditor;
-using Escc.Umbraco.PropertyEditors.Stylesheets;
 using Escc.Umbraco.PropertyTypes;
-using EsccWebTeam.Data.Web;
+using Escc.Web;
 using Exceptionless;
-using ExCSS;
 using Umbraco.Inception.CodeFirst;
 using Umbraco.Web.WebApi;
 
@@ -31,6 +29,7 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+        [CorsPolicyFromConfig]
         public HttpResponseMessage GetHeatmapAnalyticsUrls()
         {
             try
@@ -46,8 +45,6 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
                 };
                 response.Content.Headers.Expires = DateTimeOffset.Now.Add(response.Headers.CacheControl.MaxAge.Value);
 
-                EnableCorsSupport(HttpContext.Current.Request, response);
-
                 return response;
             }
             catch (Exception e)
@@ -56,35 +53,6 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
-
-        /// <summary>
-        /// Enables CORS support.
-        /// </summary>
-        /// <remarks>
-        /// This code is a temporary copy until Escc.Data.Web is moved to NuGet and improved to remove dependencies on WebForms 
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        private static void EnableCorsSupport(HttpRequest request, HttpResponseMessage response)
-        {
-            // Load config from elsewhere
-            var config = new ConfigurationCorsAllowedOriginsProvider();
-            var allowedOrigins = config.CorsAllowedOrigins();
-            
-            // Not a CORS request - do nothing
-            var requestOrigin = request.Headers["Origin"];
-            if (String.IsNullOrEmpty(requestOrigin)) return;
-
-            // Is the origin in the list of allowed origins?
-            var allowedOrigin = new List<string>(allowedOrigins).Contains(requestOrigin.ToLowerInvariant());
-
-            // If it is, echo back the origin as a CORS header
-            if (allowedOrigin)
-            {
-                response.Content.Headers.Add("Access-Control-Allow-Origin", requestOrigin);
-            }
-        }
-
-
 
         /// <summary>
         /// Checks the authorisation token passed with the request is valid, so that this method cannot be called without knowing the token.
@@ -108,9 +76,6 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
 
             try
             {
-                // Create stylesheets for properties using rich text editor
-                TinyMceStylesheets.CreateStylesheets(new StylesheetService(), new Parser());
-
                 // Insert data types before the document types that use them, otherwise the relevant property is not created
                 MultiNodeTreePickerDataType.CreateDataType();
                 RichTextAuthorNotesDataType.CreateDataType();

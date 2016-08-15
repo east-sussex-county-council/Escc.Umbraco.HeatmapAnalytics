@@ -29,7 +29,6 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
         /// </summary>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        [CorsPolicyFromConfig]
         public HttpResponseMessage GetHeatmapAnalyticsUrls()
         {
             try
@@ -44,6 +43,9 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
                     MaxAge = TimeSpan.FromDays(1)
                 };
                 response.Content.Headers.Expires = DateTimeOffset.Now.Add(response.Headers.CacheControl.MaxAge.Value);
+
+                var corsPolicy = new CorsPolicyFromConfig().CorsPolicy;
+                new CorsHeaders(Request.Headers, response.Headers, corsPolicy).UpdateHeaders();
 
                 return response;
             }

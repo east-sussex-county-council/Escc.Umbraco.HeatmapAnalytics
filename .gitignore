@@ -36,6 +36,7 @@ Properties/PublishProfiles/*
 packages
 .nuget/NuGet.targets
 *.GhostDoc.xml
+.vs
 
 # files added by nuget packages
 css

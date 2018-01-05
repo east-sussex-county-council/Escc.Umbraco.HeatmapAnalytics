@@ -36,10 +36,10 @@ namespace Escc.Umbraco.HeatmapAnalytics.ApiControllers
 
             var model = new HeatmapAnalyticsSettings();
 
-            var heatmapSettingsPage = content.AncestorOrSelf(1).Siblings().FirstOrDefault(sibling => sibling.DocumentTypeAlias == "HeatmapAnalytics");
+            var heatmapSettingsPage = content.AncestorOrSelf(1).Siblings().FirstOrDefault(sibling => sibling.DocumentTypeAlias == "heatmapAnalytics");
             if (heatmapSettingsPage == null) return model;
 
-            ((List<Uri>)model.HeatmapAnalyticsUrls).AddRange(_targetUrlReader.ReadUrls(heatmapSettingsPage, "whereToEnableIt_Content", "whereElseToEnableIt_Content"));
+            ((List<Uri>)model.HeatmapAnalyticsUrls).AddRange(_targetUrlReader.ReadUrls(heatmapSettingsPage, "whereToEnableIt", "whereElseToEnableIt"));
             return model;
         }
     }
